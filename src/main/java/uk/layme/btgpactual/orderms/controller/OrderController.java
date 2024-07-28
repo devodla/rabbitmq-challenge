@@ -12,6 +12,9 @@ import uk.layme.btgpactual.orderms.controller.dto.OrderResponse;
 import uk.layme.btgpactual.orderms.controller.dto.PaginationResponse;
 import uk.layme.btgpactual.orderms.service.OrderService;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 @RestController
 public class OrderController {
 
@@ -27,7 +30,10 @@ public class OrderController {
                                                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         Page<OrderResponse> pageResponse = orderService.findAllByCustomerId(customerId, PageRequest.of(page, pageSize));
 
+        BigDecimal totalOnOrders = orderService.findTotalOnOrdersByCustomerId(customerId);
+
         return ResponseEntity.ok(new ApiResponse<>(
+                Map.of("totalOnOrders", totalOnOrders),
                 pageResponse.getContent(),
                 PaginationResponse.fromPage(pageResponse)
         ));
