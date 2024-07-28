@@ -1,6 +1,9 @@
 package uk.layme.btgpactual.orderms.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import uk.layme.btgpactual.orderms.controller.dto.OrderResponse;
 import uk.layme.btgpactual.orderms.entity.OrderEntity;
 import uk.layme.btgpactual.orderms.entity.OrderItem;
 import uk.layme.btgpactual.orderms.listener.dto.OrderCreatedEvent;
@@ -26,6 +29,11 @@ public class OrderService {
         orderEntity.setTotal(getTotal(event));
 
         orderRepository.save(orderEntity);
+    }
+
+    public Page<OrderResponse> findAllByCustomerId(Long customerId, PageRequest pageRequest) {
+        Page<OrderEntity> orders = orderRepository.findAllByCustomerId(customerId, pageRequest);
+        return orders.map(OrderResponse::fromEntity);
     }
 
     private BigDecimal getTotal(OrderCreatedEvent event) {
