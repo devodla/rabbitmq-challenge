@@ -1,5 +1,7 @@
 package uk.layme.btgpactual.orderms.factory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import uk.layme.btgpactual.orderms.entity.OrderEntity;
 import uk.layme.btgpactual.orderms.entity.OrderItem;
 
@@ -18,5 +20,9 @@ public class OrderEntityFactory {
         entity.setItems(List.of(items));
 
         return entity;
+    }
+
+    public static Page<OrderEntity> buildWithPage() {
+        return new PageImpl<>(List.of(build()));
     }
 }
