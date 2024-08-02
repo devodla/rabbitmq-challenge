@@ -16,6 +16,7 @@ import uk.layme.btgpactual.orderms.repository.OrderRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
@@ -53,7 +54,7 @@ public class OrderService {
 
         AggregationResults<Document> response = mongoTemplate.aggregate(aggregations, "tb_orders", Document.class);
 
-        return new BigDecimal(response.getUniqueMappedResult().get("total").toString());
+        return new BigDecimal(Objects.requireNonNull(response.getUniqueMappedResult()).get("total").toString());
     }
 
     private BigDecimal getTotal(OrderCreatedEvent event) {
